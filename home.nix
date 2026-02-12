@@ -20,7 +20,16 @@
     enable = true;
   };
 
-  programs.kitty.enable = true;
+  # programs.yazi.enable = true; # file manager
+  programs.kitty = {
+    enable = true;
+    font = with pkgs;{
+      name = "Maple Mono";
+      package = maple-mono.truetype;
+    };
+    themeFile = "YsDark";
+  };
+
   programs.fuzzel.enable = true;
   programs.swaylock.enable = true;
   programs.waybar.enable = true;

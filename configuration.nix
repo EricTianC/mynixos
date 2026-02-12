@@ -42,12 +42,29 @@
     LC_TIME = "zh_CN.UTF-8";
   };
 
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5 = {
+      addons = with pkgs; [
+        qt6Packages.fcitx5-chinese-addons
+        fcitx5-rime
+	fcitx5-gtk
+	fcitx5-mozc
+      ];
+    };
+  };
+
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # services.xserver.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+  };
 
   # Enable the GNOME Desktop Environment.
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  # services.displayManager.gdm.enable = true;
+  # services.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -120,16 +137,28 @@
       fira-code-symbols
       font-awesome
       ubuntu-classic
-      # maple-mono.truetype
-      # maple-mono.NF-unhinted
-      # maple-mono.NF-CN-unhinted
+      maple-mono.truetype
+      maple-mono.NF-unhinted
+      maple-mono.NF-CN-unhinted
     ];
     
     fontconfig = {
       defaultFonts = {
-        serif = [ "Note Sans CJK SC" ]; 
+	monospace = [
+  	  "Noto Sans Mono CJK SC"
+	];
+	sansSerif = [
+	  "Noto Sans CJK SC"
+	];
+        serif = [ "Noto Serif CJK SC" ]; 
       }; 
     };
+  };
+
+  environment.variables = {
+    # GTK_IM_MODULE = "fcitx";
+    # QT_IM_MODULE = "fcitx";
+    XMODIFIERS = "@im=fcitx";
   };
 
   # Some programs need SUID wrappers, can be configured further or are
