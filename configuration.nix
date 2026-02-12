@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   imports =
@@ -57,9 +57,25 @@
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
-  services.displayManager.sddm = {
+  # services.displayManager.sddm = {
+  #   enable = true;
+  #   wayland.enable = true;
+  # };
+  services.greetd = {
     enable = true;
-    wayland.enable = true;
+    settings = {
+      default_session = {
+        command = ''
+	  ${lib.getExe pkgs.tuigreet} \
+	  --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
+	  --time \
+	  --time-format '%Y-%m-%d %H:%M' \
+	  --asterisks \
+	  --remember \
+	  --remember-session
+	'';
+      };
+    };
   };
 
   # Enable the GNOME Desktop Environment.
@@ -116,6 +132,7 @@
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
+    xwayland-satellite
   ];
 
   programs.git = {
@@ -123,6 +140,33 @@
     config = {
       init.defaultBranch = "main";
     };
+  };
+
+  programs.nixvim = {
+    enable = true;
+
+    colorschemes.catppuccin = {
+      enable = true;
+    };
+
+    opts = {
+      tabstop = 2;
+      shiftwidth = 2;
+      expandtab = true;
+
+      number = true;
+      relativenumber = true;
+    };
+
+    plugins.web-devicons.enable = true;
+    plugins.treesitter.enable = true;
+    plugins.lualine.enable = true;
+    plugins.nvim-tree.enable = true;
+    plugins.telescope.enable = true;
+    plugins.flash.enable = true;
+    plugins.noice.enable = true;
+    plugins.bufferline.enable = true;
+    plugins.snacks.enable = true;
   };
 
   programs.niri.enable = true;
