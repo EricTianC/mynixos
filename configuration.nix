@@ -46,8 +46,8 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -105,6 +105,30 @@
     enable = true;
     config = {
       init.defaultBranch = "main";
+    };
+  };
+
+  programs.niri.enable = true;
+
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+      fira-code
+      fira-code-symbols
+      font-awesome
+      ubuntu-classic
+      # maple-mono.truetype
+      # maple-mono.NF-unhinted
+      # maple-mono.NF-CN-unhinted
+    ];
+    
+    fontconfig = {
+      defaultFonts = {
+        serif = [ "Note Sans CJK SC" ]; 
+      }; 
     };
   };
 
