@@ -29,6 +29,9 @@
       package = maple-mono.truetype;
     };
     themeFile = "YsDark";
+    # settings = {
+    #   cursor_trail = 500;
+    # };
   };
 
   programs.fuzzel.enable = true;

@@ -49,8 +49,8 @@
       addons = with pkgs; [
         qt6Packages.fcitx5-chinese-addons
         fcitx5-rime
-	fcitx5-gtk
-	fcitx5-mozc
+      	fcitx5-gtk
+        fcitx5-mozc
       ];
     };
   };
@@ -66,14 +66,14 @@
     settings = {
       default_session = {
         command = ''
-	  ${lib.getExe pkgs.tuigreet} \
-	  --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
-	  --time \
-	  --time-format '%Y-%m-%d %H:%M' \
-	  --asterisks \
-	  --remember \
-	  --remember-session
-	'';
+          ${lib.getExe pkgs.tuigreet} \
+          --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
+          --time \
+          --time-format '%Y-%m-%d %H:%M' \
+          --asterisks \
+          --remember \
+          --remember-session
+        '';
       };
     };
   };
@@ -172,6 +172,18 @@
       enable = true;
       settings = {
         open_mapping = "[[<c-\\>]]";
+      };
+    };
+    plugins.lsp-format = {
+      enable = true;
+    };
+    plugins.lsp = {
+      enable = true;
+      inlayHints = true;
+      servers = {
+        nixd = {
+          enable = true;
+        };
       };
     };
     # plugins.snacks.enable = true;
