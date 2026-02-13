@@ -149,6 +149,8 @@
       enable = true;
     };
 
+    globals.mapleader = "<space>";
+
     opts = {
       tabstop = 2;
       shiftwidth = 2;
@@ -166,7 +168,13 @@
     plugins.flash.enable = true;
     plugins.noice.enable = true;
     plugins.bufferline.enable = true;
-    plugins.snacks.enable = true;
+    plugins.toggleterm = {
+      enable = true;
+      settings = {
+        open_mapping = "[[<c-\\>]]";
+      };
+    };
+    # plugins.snacks.enable = true;
   };
 
   programs.niri.enable = true;
