@@ -184,6 +184,10 @@
         nixd = {
           enable = true;
         };
+        zls = {
+          enable = true;
+          package = null;
+        };
       };
     };
     # plugins.snacks.enable = true;
