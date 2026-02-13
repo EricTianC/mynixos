@@ -118,6 +118,7 @@
     packages = with pkgs; [
     #  thunderbird
     ];
+    # shell = pkgs.zsh;
   };
 
   # Install firefox.
@@ -192,6 +193,10 @@
     };
     # plugins.snacks.enable = true;
   };
+
+  # programs.clash-verge.enable = true;
+  # programs.zsh.enable = true;
+  # programs.zsh.enableGlobalCompInit = false;
 
   programs.niri.enable = true;
 

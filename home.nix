@@ -1,4 +1,4 @@
-{ config, pkgs, ...}:
+{ config, lib, pkgs, ...}:
 {
   home.username = "tyllm";
   home.homeDirectory = "/home/tyllm";
@@ -33,6 +33,31 @@
     #   cursor_trail = 500;
     # };
   };
+
+  # programs.zsh = {
+  #   enable = true;
+  #   enableCompletion = true;
+  #   # autosuggestion.enable = true;
+  #   syntaxHighlighting.enable = true;
+
+  #   # oh-my-zsh.enable = true;
+
+  #   # initContent = let
+  #   #   # zconfEarly = lib.mkBefore ''
+  #   #   #   export PROFILING_MODE=0
+  #   #   #   if [ $PROFILING_MODE -ne 0 ]; then
+  #   #   #     zmodload zsh/zprof
+  #   #   #   fi
+  #   #   # '';
+  #   #   # zconfAfter = lib.mkAfter ''
+  #   #   #   if [ $PROFILING_MODE -ne 0 ]; then
+  #   #   #     zprof
+  #   #   #   fi
+  #   #   # '';
+  #   #   zconfEarly = lib.mkBefore "zmodload zsh/zprof";
+  #   #   zconfAfter = lib.mkAfter "zprof";
+  #   # in lib.mkMerge [zconfEarly zconfAfter];
+  # };
 
   programs.fuzzel.enable = true;
   programs.swaylock = {
