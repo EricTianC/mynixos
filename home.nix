@@ -34,6 +34,20 @@
     # };
   };
 
+  programs.fish = {
+    enable = true;
+
+    plugins = [
+      { 
+        name = "tide";
+        src = pkgs.fishPlugins.tide.src;
+      }
+    ];
+  };
+
+  catppuccin.fish.enable = true;
+
+
   # programs.zsh = {
   #   enable = true;
   #   enableCompletion = true;

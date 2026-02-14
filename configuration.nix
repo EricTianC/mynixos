@@ -24,6 +24,9 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  networking.proxy.default = "http://127.0.0.1:7890";
+  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
   # Set your time zone.
   time.timeZone = "Asia/Shanghai";
 
@@ -107,6 +110,12 @@
     #media-session.enable = true;
   };
 
+  services.mihomo = {
+    enable = true;
+
+    configFile = "/var/lib/mihomo/config.yaml";
+  };
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -143,6 +152,13 @@
     };
   };
 
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      set fish_greeting # Disable greeting
+    '';
+  };
+
   programs.nixvim = {
     enable = true;
 
@@ -173,6 +189,7 @@
       enable = true;
       settings = {
         open_mapping = "[[<c-\\>]]";
+        shell = "fish";
       };
     };
     plugins.lsp-format = {
