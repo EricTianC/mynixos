@@ -167,6 +167,7 @@
     };
 
     globals.mapleader = "<space>";
+    globals.maplocalleader = "<space><space>";
 
     opts = {
       tabstop = 2;
@@ -177,38 +178,91 @@
       relativenumber = true;
     };
 
-    plugins.web-devicons.enable = true;
-    plugins.treesitter.enable = true;
-    plugins.lualine.enable = true;
-    plugins.nvim-tree.enable = true;
-    plugins.telescope.enable = true;
-    plugins.flash.enable = true;
-    plugins.noice.enable = true;
-    plugins.bufferline.enable = true;
-    plugins.toggleterm = {
-      enable = true;
-      settings = {
-        open_mapping = "[[<c-\\>]]";
-        shell = "fish";
-      };
-    };
-    plugins.lsp-format = {
-      enable = true;
-    };
-    plugins.lsp = {
-      enable = true;
-      inlayHints = true;
-      servers = {
-        nixd = {
-          enable = true;
-        };
-        zls = {
-          enable = true;
-          package = null;
+    plugins = {
+      web-devicons.enable = true;
+      treesitter.enable = true;
+      lualine.enable = true;
+      nvim-tree.enable = true;
+      telescope.enable = true;
+      flash.enable = true;
+      noice.enable = true;
+      bufferline.enable = true;
+      toggleterm = {
+        enable = true;
+        settings = {
+          open_mapping = "[[<c-\\>]]";
+          shell = "fish";
         };
       };
+      lsp-format = {
+        enable = true;
+      };
+      lsp = {
+        enable = true;
+        inlayHints = true;
+        servers = {
+          nixd = {
+            enable = true;
+          };
+          clangd = {
+            enable = true;
+            package = null;
+          };
+          zls = {
+            enable = true;
+            package = null;
+          };
+        };
+      };
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+        settings.sources = [
+          { name = "luasnip"; }
+          { name = "nvim_lsp"; }
+          { name = "path"; }
+          { name = "buffer"; }
+        ];
+        settings.mapping = {
+          "<CR>" = "cmp.mapping.confirm({ select = true })";
+        };
+        settings.snippet = {
+          expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+        };
+      };
+      luasnip = {
+        enable = true;
+        fromVscode = [
+          {lazyLoad = true;}
+        ];
+      };
+      lean = {
+        enable = true;
+        settings = {
+          mapping = true;
+          abbreviations = {
+            enable = true;
+          };
+          lsp = {
+            enable = true;
+          };
+          infoview = {
+            autoopen = true;
+            orientation = "auto";
+            indicators = "auto";
+          };
+        };
+      };
+    # snacks.enable = true;
     };
-    # plugins.snacks.enable = true;
+
+    dependencies = {
+      fd.enable = true;
+      lean = {
+        enable = true;
+        packageFallback = true;
+      };
+    };
   };
 
   # programs.clash-verge.enable = true;
