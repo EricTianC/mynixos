@@ -203,6 +203,13 @@
       relativenumber = true;
     };
 
+    clipboard = {
+      register = "unnamedplus";
+      providers = {
+        wl-copy.enable = true;
+      };
+    };
+
     plugins = {
       web-devicons.enable = true;
       treesitter.enable = true;
