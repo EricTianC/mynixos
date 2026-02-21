@@ -74,6 +74,7 @@
     enable = true;
     type = "fcitx5";
     fcitx5 = {
+      waylandFrontend = true;
       addons = with pkgs; [
         qt6Packages.fcitx5-chinese-addons
         fcitx5-rime
@@ -92,17 +93,20 @@
   services.greetd = {
     enable = true;
     settings = {
-      default_session = {
-        command = ''
-          ${lib.getExe pkgs.tuigreet} \
-          --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
-          --time \
-          --time-format '%Y-%m-%d %H:%M' \
-          --asterisks \
-          --remember \
-          --remember-session
-        '';
-      };
+       default_session = {
+         command = ''
+           ${lib.getExe pkgs.tuigreet} \
+           --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
+           --time \
+           --time-format '%Y-%m-%d %H:%M' \
+           --asterisks \
+           --remember \
+           --remember-session
+         '';
+       };
+    #   default_session = {
+    #     command = "${pkgs.cage}/bin/cage -s -- ${pkgs.wlgreet}/bin/wlgreet --command niri";
+    #   };
     };
   };
 
@@ -168,6 +172,9 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     xwayland-satellite
+    cava
+    yazi
+    # wlgreet
   ];
 
   programs.git = {
@@ -212,7 +219,27 @@
 
     plugins = {
       web-devicons.enable = true;
-      treesitter.enable = true;
+      treesitter = {
+        enable = true;
+        highlight.enable = true;
+        indent.enable = true;
+        folding.enable = true;
+      };
+      treesitter-textobjects = {
+        enable = true;
+        settings = {
+          enable = true;
+          lookahead = true;
+          keymaps = {
+            aa = "@parameter.outer";
+            ab = "@block.outer";
+            ac = "@call.outer";
+            ia = "@parameter.inner";
+            ib = "@block.inner";
+            ic = "@call.inner";
+          };
+        };
+      };
       lualine.enable = true;
       nvim-tree.enable = true;
       telescope.enable = true;
@@ -317,25 +344,27 @@
       maple-mono.NF-unhinted
       maple-mono.NF-CN-unhinted
       nerd-fonts.jetbrains-mono
+      nerd-fonts.martian-mono
     ];
     
     fontconfig = {
       defaultFonts = {
-	monospace = [
-  	  "Noto Sans Mono CJK SC"
-	];
-	sansSerif = [
-	  "Noto Sans CJK SC"
-	];
+        monospace = [
+          "Noto Sans Mono CJK SC"
+        ];
+        sansSerif = [
+          "Noto Sans CJK SC"
+        ];
         serif = [ "Noto Serif CJK SC" ]; 
       }; 
     };
   };
 
   environment.variables = {
-    # GTK_IM_MODULE = "fcitx";
+    # GTK_IM_MODULE = lib.mkForce null;
     # QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
+    # XMODIFIERS = "@im=fcitx";
+    EDITOR = "nvim";
   };
 
   # Some programs need SUID wrappers, can be configured further or are

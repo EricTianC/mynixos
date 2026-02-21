@@ -29,9 +29,10 @@
       package = maple-mono.truetype;
     };
     themeFile = "YsDark";
-    # settings = {
-    #   cursor_trail = 500;
-    # };
+    settings = {
+      # cursor_trail = 500;
+      hide_window_decorations = "yes";
+    };
   };
 
   programs.fish = {
@@ -46,6 +47,7 @@
   };
 
   catppuccin.fish.enable = true;
+  catppuccin.fuzzel.enable = true;
 
 
   # programs.zsh = {
@@ -73,7 +75,14 @@
   #   # in lib.mkMerge [zconfEarly zconfAfter];
   # };
 
-  programs.fuzzel.enable = true;
+  programs.fuzzel = {
+    enable = true;
+    settings = {
+      main = {
+        font = "Ubuntu Mono";
+      };
+    };
+  };
   programs.swaylock = {
     enable = true;
     settings = {
@@ -83,7 +92,51 @@
   };
   programs.waybar.enable = true;
   services.mako.enable = true;
-  services.swayidle.enable = true;
+  services.swayidle = 
+  let
+    lock = "${pkgs.swaylock}/bin/swaylock --daemonize";
+    display = status: "${pkgs.niri}/bin/niri msg action power-${status}-monitors";
+  in
+  {
+    enable = true;
+    timeouts = [
+      {
+        timeout = 150;
+        command = "${pkgs.libnotify}/bin/notify-send 'Locking in 30 seconds' -t 30000";
+      }
+      {
+        timeout = 180;
+        command = lock;
+      }
+      {
+        timeout = 210;
+        command = display "off";
+        resumeCommand = display "on";
+      }
+      {
+        timeout = 230;
+        command = "${pkgs.systemd}/bin/systemctl suspend";
+      }
+    ];
+    events = [
+      {
+        event = "before-sleep";
+        command = (display "off") + "; " + lock;
+      }
+      {
+        event = "after-resume";
+        command = display "on";
+      }
+      {
+        event = "lock";
+        command = (display "off") + "; " + lock;
+      }
+      {
+        event = "unlock";
+        command = display "on";
+      }
+    ];
+  };
   services.polkit-gnome.enable = true;
 
   xdg.configFile."waybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/waybar";
