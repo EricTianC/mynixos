@@ -17,12 +17,14 @@
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    mihomosh.url = "path:./mihomosh";
+
     catppuccin.url = "github:catppuccin/nix/release-25.11";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixvim, catppuccin, ... }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixvim, mihomosh, catppuccin, ... }@inputs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit nixpkgs-unstable; };
+      specialArgs = { inherit nixpkgs-unstable; inherit mihomosh;};
       modules = [
         ./configuration.nix
 

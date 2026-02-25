@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }:
+{ lib, config, mihomosh, pkgs, ... }:
 
 {
   imports =
@@ -25,7 +25,7 @@
   networking.networkmanager.enable = true;
 
   networking.proxy.default = "http://127.0.0.1:7890";
-  networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  networking.proxy.noProxy = "127.0.0.1,localhost,::1,internal.domain";
 
   # Enable OpenGL
   hardware.graphics = {
@@ -174,6 +174,8 @@
     xwayland-satellite
     cava
     yazi
+    wl-clipboard
+    mihomosh.packages.x86_64-linux.default
     # wlgreet
   ];
 
@@ -208,6 +210,21 @@
 
       number = true;
       relativenumber = true;
+
+      foldcolumn = "auto";
+      foldlevel = 99;
+      foldlevelstart = 99;
+      foldenable = true;
+
+      fillchars = {
+				eob = " ";
+				fold = " ";
+				foldopen = "";
+				foldsep = " ";
+				# foldinner = " ";
+				foldclose = "";
+			};
+      
     };
 
     clipboard = {
@@ -219,6 +236,53 @@
 
     plugins = {
       web-devicons.enable = true;
+      statuscol = {
+        enable = true;
+        settings = {
+          bt_ignore = null;
+          clickhandlers = {
+            FoldClose = "require('statuscol.builtin').foldclose_click";
+            FoldOpen = "require('statuscol.builtin').foldopen_click";
+            FoldOther = "require('statuscol.builtin').foldother_click";
+            Lnum = "require('statuscol.builtin').lnum_click";
+          };
+          clickmod = "c";
+          ft_ignore = null;
+          relculright = true;
+          segments = [
+            {
+              click = "v:lua.ScFa";
+              text = [
+                "%C"
+              ];
+            }
+            {
+              click = "v:lua.ScSa";
+              text = [
+                "%s"
+              ];
+            }
+            {
+              click = "v:lua.ScLa";
+              condition = [
+                true
+                {
+                  __raw = "require('statuscol.builtin').not_empty";
+                }
+              ];
+              text = [
+                {
+                  __raw = "require('statuscol.builtin').lnumfunc";
+                }
+                " "
+              ];
+            }
+          ];
+          setopt = true;
+          thousands = ".";
+        };
+      };
+      nvim-ufo.enable = true;
       treesitter = {
         enable = true;
         highlight.enable = true;
@@ -289,6 +353,9 @@
           expand = "function(args) require('luasnip').lsp_expand(args.body) end";
         };
       };
+      dap = {
+        enable = true;
+      };
       luasnip = {
         enable = true;
         fromVscode = [
@@ -312,6 +379,9 @@
           };
         };
       };
+      flutter-tools = {
+        enable = true;
+      };
     # snacks.enable = true;
     };
 
@@ -320,6 +390,10 @@
       lean = {
         enable = true;
         packageFallback = true;
+      };
+      flutter = {
+        enable = false;
+        package = null;
       };
     };
   };
@@ -400,4 +474,5 @@
       "https://mirrors.cernet.edu.cn/nix-channels/store"
     ];
   };
+  nix.settings.trusted-users = [ "root" "tyllm" "@wheel" ];
 }

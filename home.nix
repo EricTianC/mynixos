@@ -85,16 +85,29 @@
   };
   programs.swaylock = {
     enable = true;
+    package = pkgs.swaylock-effects;
     settings = {
       screenshots = true;
       clock = true;
+      indicator = true;
+      indicator-radius = 100;
+      indicator-thickness = 7;
+      effect-blur = "7x5";
+      effect-vignette = "0.5:0.5";
+      ring-color = "bb00cc";
+      key-hl-color = "880033";
+      line-color = "00000000";
+      inside-color = "00000088";
+      separator-color = "00000000";
+      grace = 2;
+      fade-in = 0.2;
     };
   };
   programs.waybar.enable = true;
   services.mako.enable = true;
   services.swayidle = 
   let
-    lock = "${pkgs.swaylock}/bin/swaylock --daemonize";
+    lock = "${pkgs.swaylock-effects}/bin/swaylock --daemonize";
     display = status: "${pkgs.niri}/bin/niri msg action power-${status}-monitors";
   in
   {
@@ -140,7 +153,7 @@
   services.polkit-gnome.enable = true;
 
   xdg.configFile."waybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/waybar";
-  xdg.configFile."swaylock/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/swaylock/config";
+  # xdg.configFile."swaylock/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/swaylock/config";
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/niri/config.kdl";
 
   home.stateVersion = "25.11";
