@@ -104,6 +104,7 @@
     };
   };
   programs.waybar.enable = true;
+  services.ssh-agent.enable = true;
   services.mako.enable = true;
   services.swayidle = 
   let

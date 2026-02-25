@@ -186,6 +186,12 @@
     };
   };
 
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = with pkgs; pinentry-qt;
+    enableSSHSupport = true;
+  };
+
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
