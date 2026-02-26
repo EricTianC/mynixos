@@ -14,14 +14,27 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/5a397869-a168-40fc-afc7-fa1e5251504b";
-      fsType = "ext4";
+    { device = "/dev/nvme0n1p2";
+      fsType = "btrfs";
+      options = [ "subvol=root" "compress=zstd" "ssd" "discard=async" "space_cache=v2" ];
     };
 
-  fileSystems."/nix/store" =
-    { device = "/nix/store";
-      fsType = "none";
-      options = [ "bind" ];
+  fileSystems."/nix" =
+    { device = "/dev/nvme0n1p2";
+      fsType = "btrfs";
+      options = [ "subvol=nix" "noatime" "compress=zstd" "ssd" "discard=async" "space_cache=v2" ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/nvme0n1p2";
+      fsType = "btrfs";
+      options = [ "subvol=home" "compress=zstd" "ssd" "discard=async" "space_cache=v2" ];
+    };
+
+  fileSystems."/swap" =
+    { device = "/dev/nvme0n1p2";
+      fsType = "btrfs";
+      options = [ "subvol=swap" "noatime" "nodatacow" ];
     };
 
   fileSystems."/boot" =
@@ -30,14 +43,9 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  fileSystems."/mnt/sda1" =
-    { device = "/dev/disk/by-uuid/d5b98746-8c3d-4132-8d90-432997f743e5";
-      fsType = "ext4";
-    };
-
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/fdf5af5c-f812-4903-bc10-ee60394706ed"; }
-    ];
+  swapDevices = [
+    {device = "/swap/swapfile";}
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
