@@ -7,6 +7,7 @@
     fastfetch
     swaybg
     qq
+    wechat-uos
   ];
   
   programs.git = {
@@ -119,16 +120,16 @@
         command = "${pkgs.libnotify}/bin/notify-send 'Locking in 30 seconds' -t 30000";
       }
       {
-        timeout = 180;
+        timeout = 200;
         command = lock;
       }
       {
-        timeout = 210;
+        timeout = 250;
         command = display "off";
         resumeCommand = display "on";
       }
       {
-        timeout = 230;
+        timeout = 300;
         command = "${pkgs.systemd}/bin/systemctl suspend";
       }
     ];

@@ -141,7 +141,7 @@
 
   services.mihomo = {
     enable = true;
-
+    tunMode = true;
     configFile = "/var/lib/mihomo/config.yaml";
   };
 
@@ -154,6 +154,7 @@
     description = "tyllm";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
+      brightnessctl
     #  thunderbird
     ];
     # shell = pkgs.zsh;
@@ -164,6 +165,11 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -176,6 +182,7 @@
     yazi
     wl-clipboard
     mihomosh.packages.x86_64-linux.default
+    distrobox
     # wlgreet
   ];
 
@@ -439,6 +446,14 @@
       }; 
     };
   };
+
+  # # black screen
+  # programs.steam = {
+  #   enable = true;
+  #   remotePlay.openFirewall = true;
+  #   dedicatedServer.openFirewall = true;
+  #   localNetworkGameTransfers.openFirewall = true;
+  # };
 
   environment.variables = {
     # GTK_IM_MODULE = lib.mkForce null;
