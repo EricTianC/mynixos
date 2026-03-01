@@ -183,6 +183,7 @@
     wl-clipboard
     mihomosh.packages.x86_64-linux.default
     distrobox
+    pulseaudioFull
     # wlgreet
   ];
 
