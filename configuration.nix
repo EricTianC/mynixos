@@ -215,7 +215,7 @@
     };
 
     globals.mapleader = "<space>";
-    globals.maplocalleader = "<space><space>";
+    # globals.maplocalleader = "<space><space>";
 
     opts = {
       tabstop = 2;
@@ -396,6 +396,14 @@
       flutter-tools = {
         enable = true;
       };
+      vimtex = {
+        enable = true;
+        texlivePackage = null;
+        settings = {
+          view_method = "zathura";
+        };
+      };
+      cmp-vimtex.enable = true;
     # snacks.enable = true;
     };
 
@@ -431,6 +439,9 @@
       maple-mono.truetype
       maple-mono.NF-unhinted
       maple-mono.NF-CN-unhinted
+      maple-mono.truetype-autohint
+      maple-mono.NF
+      maple-mono.NF-CN
       nerd-fonts.jetbrains-mono
       nerd-fonts.martian-mono
     ];
@@ -492,8 +503,8 @@
   
   nix.settings = {
     substituters = [
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
-      "https://mirrors.cernet.edu.cn/nix-channels/store"
+      # "https://mirrors.ustc.edu.cn/nix-channels/store"
+      # "https://mirrors.cernet.edu.cn/nix-channels/store"
     ];
   };
   nix.settings.trusted-users = [ "root" "tyllm" "@wheel" ];

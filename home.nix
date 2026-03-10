@@ -8,7 +8,32 @@
     swaybg
     qq
     wechat-uos
+    # texliveFull
+    (texliveFull.withPackages (ps: with ps; [ fandol texlive-scripts texlive-scripts-extra ]))
+    ltspice
+    sage
   ];
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    # 如果你也希望在 X11 应用程序中生效
+    x11.enable = true;
+    
+    package = pkgs.kdePackages.breeze-icons; # 或者 pkgs.libsForQt5.breeze-qt5
+    name = "breeze_cursors";
+    size = 24;
+  };
+
+  # 确保 GTK 配置被启用
+  gtk = {
+    enable = true;
+    cursorTheme = {
+      package = pkgs.kdePackages.breeze-icons;
+      name = "breeze_cursors";
+    };
+  };
+
+
   
   programs.git = {
     enable = true;
@@ -27,7 +52,7 @@
     enable = true;
     font = with pkgs;{
       name = "Maple Mono";
-      package = maple-mono.truetype;
+      package = maple-mono.truetype-autohint;
     };
     themeFile = "YsDark";
     settings = {
