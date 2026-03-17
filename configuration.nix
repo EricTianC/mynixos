@@ -3,7 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { lib, config, mihomosh, pkgs, ... }:
-
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -184,8 +183,12 @@
     mihomosh.packages.x86_64-linux.default
     distrobox
     pulseaudioFull
+
+    uv
     # wlgreet
   ];
+
+  programs.nix-ld.enable = true;
 
   programs.git = {
     enable = true;
@@ -466,6 +469,11 @@
   #   dedicatedServer.openFirewall = true;
   #   localNetworkGameTransfers.openFirewall = true;
   # };
+  services.deluge = {
+    enable = true;
+    web.enable = true;
+  };
+
 
   environment.variables = {
     # GTK_IM_MODULE = lib.mkForce null;
@@ -486,6 +494,7 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+  services.earlyoom.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

@@ -20,11 +20,14 @@
     mihomosh.url = "path:./mihomosh";
 
     catppuccin.url = "github:catppuccin/nix/release-25.11";
+
+    # nix-openclaw.url = "github:openclaw/nix-openclaw";
+    nullclaw.url = "github:nullclaw/nullclaw";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixvim, mihomosh, catppuccin, ... }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixvim, mihomosh, catppuccin, nullclaw, ... }@inputs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit nixpkgs-unstable; inherit mihomosh;};
+      specialArgs = { inherit nixpkgs-unstable; inherit mihomosh; inherit nullclaw;};
       modules = [
         ./configuration.nix
 
@@ -32,12 +35,17 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = { inherit nullclaw; };
           home-manager.users.tyllm = {
             imports = [
               ./home.nix
               catppuccin.homeModules.catppuccin
+
               ];
           };
+        }
+        {
+          nixpkgs.overlays = [ ];
         }
         nixvim.nixosModules.nixvim
       ];

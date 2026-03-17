@@ -1,4 +1,7 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, nullclaw, ...}:
+let 
+  nullclaw-pkg = nullclaw.packages.${pkgs.system}.default ;
+in
 {
   home.username = "tyllm";
   home.homeDirectory = "/home/tyllm";
@@ -12,6 +15,8 @@
     (texliveFull.withPackages (ps: with ps; [ fandol texlive-scripts texlive-scripts-extra ]))
     ltspice
     sage
+    mathematica
+    nullclaw-pkg
   ];
 
   home.pointerCursor = {
@@ -178,6 +183,24 @@
     ];
   };
   services.polkit-gnome.enable = true;
+
+  systemd.user.services.nullclaw = {
+    Unit = {
+      Description = "nullclaw gateway runtime";
+      After = "network.targe";
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${nullclaw-pkg}/bin/nullclaw gateway";
+      Restart = "always";
+      RestartSec = 3;
+      EnvironmentFile="-/home/tyllm/.nullclaw/.env";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
 
   xdg.configFile."waybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/waybar";
   # xdg.configFile."swaylock/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/swaylock/config";
