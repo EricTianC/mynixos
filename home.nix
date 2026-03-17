@@ -16,7 +16,7 @@ in
     ltspice
     sage
     mathematica
-    nullclaw-pkg
+    # nullclaw-pkg
   ];
 
   home.pointerCursor = {
@@ -184,22 +184,22 @@ in
   };
   services.polkit-gnome.enable = true;
 
-  systemd.user.services.nullclaw = {
-    Unit = {
-      Description = "nullclaw gateway runtime";
-      After = "network.targe";
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${nullclaw-pkg}/bin/nullclaw gateway";
-      Restart = "always";
-      RestartSec = 3;
-      EnvironmentFile="-/home/tyllm/.nullclaw/.env";
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-  };
+    # systemd.user.services.nullclaw = {
+    #   Unit = {
+    #     Description = "nullclaw gateway runtime";
+    #     After = "network.targe";
+    #   };
+    #   Service = {
+    #     Type = "simple";
+    #     ExecStart = "${nullclaw-pkg}/bin/nullclaw gateway";
+    #     Restart = "always";
+    #     RestartSec = 3;
+    #     EnvironmentFile="-/home/tyllm/.nullclaw/.env";
+    #   };
+    #   Install = {
+    #     WantedBy = [ "default.target" ];
+    #   };
+    # };
 
 
   xdg.configFile."waybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/waybar";
