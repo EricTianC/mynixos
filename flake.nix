@@ -45,7 +45,8 @@
           };
         }
         {
-          nixpkgs.overlays = [ ];
+          nixpkgs.overlays = [
+          ];
         }
         nixvim.nixosModules.nixvim
       ];
