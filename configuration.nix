@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, mihomosh, pkgs, ... }:
+{ lib, config, mihomosh, pkgs, noctalia, ... }:
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -32,6 +32,8 @@
   hardware.graphics = {
     enable = true;
   };
+
+  hardware.bluetooth.enable = true;
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
@@ -179,6 +181,7 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     xwayland-satellite
+    # noctalia.inputs.noctalia-qs.packages.${pkgs.system}.default
     cava
     yazi
     wl-clipboard
@@ -291,6 +294,9 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
   services.earlyoom.enable = true;
+
+  services.tuned.enable = true;
+  services.upower.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
