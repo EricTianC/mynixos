@@ -33,11 +33,13 @@
 
     # nix-openclaw.url = "github:openclaw/nix-openclaw";
     nullclaw.url = "github:nullclaw/nullclaw";
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
+
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixvim, noctalia, mihomosh, catppuccin, nullclaw, ... }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixvim, noctalia, mihomosh, catppuccin, nullclaw, nix-flatpak, ... }@inputs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit nixpkgs-unstable; inherit mihomosh; inherit noctalia; inherit nullclaw;};
+      specialArgs = { inherit mihomosh; inherit noctalia; inherit nullclaw;};
       modules = [
         ./configuration.nix
 
@@ -45,12 +47,21 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit nullclaw; };
+          home-manager.extraSpecialArgs = let
+              system = "x86_64-linux";
+            in { 
+              pkgs-unstable = import nixpkgs-unstable {
+                inherit system;
+                config.allowUnfree = true;
+              };
+              inherit nullclaw;
+            };
           home-manager.users.tyllm = {
             imports = [
               ./home.nix
               catppuccin.homeModules.catppuccin
               noctalia.homeModules.default
+              nix-flatpak.homeManagerModules.nix-flatpak
 
               #./tastes/waybar.nix
               ./tastes/noctalia.nix
@@ -63,6 +74,7 @@
           ];
         }
         nixvim.nixosModules.nixvim
+        nix-flatpak.nixosModules.nix-flatpak
         
       ];
     };

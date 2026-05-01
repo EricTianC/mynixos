@@ -1,4 +1,4 @@
-{ config, lib, pkgs, nullclaw, ...}:
+{ config, lib, pkgs, nullclaw, pkgs-unstable,...}:
 let 
   nullclaw-pkg = nullclaw.packages.${pkgs.system}.default ;
 in
@@ -9,15 +9,21 @@ in
   home.packages = with pkgs;[
     fastfetch
     swaybg
-    qq
-    wechat-uos
+    pkgs-unstable.qq
+    pkgs-unstable.wechat-uos
     # texliveFull
     (texliveFull.withPackages (ps: with ps; [ fandol texlive-scripts texlive-scripts-extra ]))
     ltspice
     sage
     mathematica
-    # nullclaw-pkg
+
+    bat
+    splayer
   ];
+
+  home.shellAliases = {
+    cat = "bat -pp";
+  };
 
   home.pointerCursor = {
     gtk.enable = true;
@@ -52,6 +58,8 @@ in
   #   enable = true;
   # };
 
+  programs.bash.enable = true;
+
   # programs.yazi.enable = true; # file manager
   programs.kitty = {
     enable = true;
@@ -80,6 +88,13 @@ in
 
   catppuccin.fish.enable = true;
   catppuccin.fuzzel.enable = true;
+
+  services.flatpak = {
+    enable = true;
+    packages = [
+      # "io.github.hypengw.Qcm"
+    ];
+  };
 
 
   # programs.zsh = {
@@ -128,7 +143,12 @@ in
 
 
   # xdg.configFile."swaylock/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/swaylock/config";
+  # xdg.configFile."containers/containers.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/containers/containers.conf";
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/niri/config.kdl";
+  # xdg.systemDirs.data = [ "$HOME/.local/share/flatpak/exports/share" ];
+  home.sessionVariables = {
+    XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/share:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share";
+  };
 
   home.stateVersion = "25.11";
 }

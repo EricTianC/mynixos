@@ -14,6 +14,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -155,7 +156,7 @@
   users.users.tyllm = {
     isNormalUser = true;
     description = "tyllm";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "wireshark" ];
     packages = with pkgs; [
       brightnessctl
     #  thunderbird
@@ -190,6 +191,9 @@
     pulseaudioFull
 
     tree-sitter
+    zathura
+
+    wireshark
 
     uv
     # wlgreet
@@ -223,6 +227,11 @@
   # programs.zsh.enableGlobalCompInit = false;
 
   programs.niri.enable = true;
+
+  programs.wireshark = {
+    enable = true;
+    
+  };
 
   fonts = {
     enableDefaultPackages = true;
@@ -269,6 +278,8 @@
     web.enable = true;
   };
 
+  services.flatpak.enable = true;
+
 
   environment.variables = {
     # GTK_IM_MODULE = lib.mkForce null;
@@ -303,6 +314,11 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  # networking.firewall.extraCommands = ''
+  #   iptables -I INPUT -i lo -p tcp --dport 7890:7892 -j ACCEPT
+  #   iptables -I INPUT -s 10.88.0.0/16 -p tcp --dport 7890:7892 -j ACCEPT
+  #   iptables -A INPUT -i wlp2s0 -p tcp --dport 7890:7892 -j DROP
+  # '';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

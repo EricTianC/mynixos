@@ -1,4 +1,4 @@
-{lib, pkgs, ...}:
+{lib, pkgs, config, ...}:
 {
   programs.nixvim = {
     enable = true;
@@ -171,6 +171,12 @@
         highlight.enable = true;
         indent.enable = true;
         folding.enable = true;
+
+        grammarPackages = config.programs.nixvim.plugins.treesitter.package.allGrammars ++ [
+          pkgs.tree-sitter-grammars.tree-sitter-koka
+        ];
+
+        languageRegister.koka = ["kk"];
       };
       treesitter-textobjects = {
         enable = true;
@@ -193,6 +199,7 @@
       flash.enable = true;
       noice.enable = true;
       bufferline.enable = true;
+      codesnap.enable = true;
       toggleterm = {
         enable = true;
         settings = {
@@ -217,6 +224,10 @@
           zls = {
             enable = true;
             package = null;
+          };
+          koka = {
+            enable = true;
+            packageFallback = true;
           };
         };
       };
