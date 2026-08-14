@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, mihomosh, pkgs, noctalia, ... }:
+{ lib, config, mihomosh, pkgs, noctalia, pkgs-unstable, ... }:
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -13,6 +13,8 @@
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  systemd.tpm2.enable = false;
+  boot.initrd.systemd.tpm2.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -81,9 +83,14 @@
       waylandFrontend = true;
       addons = with pkgs; [
         qt6Packages.fcitx5-chinese-addons
+        fcitx5-pinyin-zhwiki
         fcitx5-rime
+
+        fcitx5-fluent
+        catppuccin-fcitx5
+        fcitx5-nord
+        fcitx5-mellow-themes
       	fcitx5-gtk
-        fcitx5-mozc
       ];
     };
   };
@@ -94,25 +101,28 @@
   #   enable = true;
   #   wayland.enable = true;
   # };
-  services.greetd = {
+  programs.noctalia-greeter = {
     enable = true;
-    settings = {
-       default_session = {
-         command = ''
-           ${lib.getExe pkgs.tuigreet} \
-           --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
-           --time \
-           --time-format '%Y-%m-%d %H:%M' \
-           --asterisks \
-           --remember \
-           --remember-session
-         '';
-       };
-    #   default_session = {
-    #     command = "${pkgs.cage}/bin/cage -s -- ${pkgs.wlgreet}/bin/wlgreet --command niri";
-    #   };
-    };
   };
+  # services.greetd = {
+  #   enable = true;
+  #   settings = {
+  #      default_session = {
+  #        command = ''
+  #          ${lib.getExe pkgs.tuigreet} \
+  #          --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
+  #          --time \
+  #          --time-format '%Y-%m-%d %H:%M' \
+  #          --asterisks \
+  #          --remember \
+  #          --remember-session
+  #        '';
+  #      };
+  #   #   default_session = {
+  #   #     command = "${pkgs.cage}/bin/cage -s -- ${pkgs.wlgreet}/bin/wlgreet --command niri";
+  #   #   };
+  #   };
+  # };
 
   # Enable the GNOME Desktop Environment.
   # services.displayManager.gdm.enable = true;
@@ -183,7 +193,6 @@
     wget
     xwayland-satellite
     # noctalia.inputs.noctalia-qs.packages.${pkgs.system}.default
-    cava
     yazi
     wl-clipboard
     mihomosh.packages.x86_64-linux.default
@@ -192,10 +201,29 @@
 
     tree-sitter
     zathura
+    obsidian
 
     wireshark
+    iverilog
+    gtkwave
+    element-desktop
 
     uv
+    dotnet-sdk_9
+    nodejs
+    # (julia.withPackages [ "Plots" ])
+
+    fd
+    ripgrep
+    pkgs-unstable.git-xet
+
+    agenix
+
+    pkgs-unstable.prismlauncher
+    godot-mono
+
+    elan
+    
     # wlgreet
   ];
 
@@ -243,6 +271,7 @@
       fira-code-symbols
       font-awesome
       ubuntu-classic
+      liberation_ttf
       maple-mono.truetype
       maple-mono.NF-unhinted
       maple-mono.NF-CN-unhinted
@@ -266,13 +295,20 @@
     };
   };
 
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep 10 --keep-since 15d";
+    flake = "/etc/nixos";
+  };
+
   # # black screen
-  # programs.steam = {
-  #   enable = true;
-  #   remotePlay.openFirewall = true;
-  #   dedicatedServer.openFirewall = true;
-  #   localNetworkGameTransfers.openFirewall = true;
-  # };
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
+  };
   services.deluge = {
     enable = true;
     web.enable = true;
@@ -309,8 +345,31 @@
   services.tuned.enable = true;
   services.upower.enable = true;
 
+  # services.freshrss = {
+  #   enable = true;
+  #   baseUrl = "http://127.0.0.1:8900";
+  #   passwordFile = "/run/secrets/freshrss";
+  #   language = "zh";
+  # }; 配置搞不懂一点
+
+  age.identityPaths = [ "/home/tyllm/.ssh/id_ed25519" ];
+
+  # age.secrets.miniflux-creds.file = ./secrets/miniflux-creds.age;
+  # services.miniflux = {
+  #   enable = true;
+  #   adminCredentialsFile = config.age.secrets.miniflux-creds.path;
+  #   config = {
+  #     MEDIA_PROXY_MODE = "all";
+  #     LISTEN_ADDR = "localhost:18069";
+  #     HTTP_PROXY = "http://127.0.0.1:7890";
+  #     HTTPS_PROXY = "http://127.0.0.1:7890";
+  #     FETCHER_ALLOW_PRIVATE_NETWORKS = "1";
+  #     ALLOW_PRIVATE_NETWORK_ACCESS = "1";
+  #   };
+  # };
+
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 10006 25565 ]; # for peer.zig
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
@@ -335,4 +394,7 @@
     ];
   };
   nix.settings.trusted-users = [ "root" "tyllm" "@wheel" ];
+nixpkgs.config.permittedInsecurePackages = [
+                "pnpm-10.29.2"
+              ];
 }

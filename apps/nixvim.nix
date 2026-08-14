@@ -118,6 +118,7 @@
 
     plugins = {
       web-devicons.enable = true;
+      dotnet.enable = true;
       statuscol = {
         enable = true;
         settings = {

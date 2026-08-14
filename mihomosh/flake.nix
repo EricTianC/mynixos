@@ -32,7 +32,7 @@
               owner = "SamuNatsu";
               repo = "mihomosh";
               rev = "v2";
-              hash = "sha256-7Ayq4i4XWEzG99BCyouMR6DIYa1SsvPQdiwgqoj0RqE=";
+              hash = "sha256-d9hWJbDQd6Hbrj3g4gY439AH4rKNyFt5c83wa2e4Y2A=";
             };
           strictDeps = true;
 

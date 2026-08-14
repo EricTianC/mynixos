@@ -10,15 +10,21 @@ in
     fastfetch
     swaybg
     pkgs-unstable.qq
-    pkgs-unstable.wechat-uos
+    # pkgs-unstable.wechat
     # texliveFull
     (texliveFull.withPackages (ps: with ps; [ fandol texlive-scripts texlive-scripts-extra ]))
-    ltspice
+    # ltspice # 眼睛受不了
+    qucs-s # ltspice 替代品
     sage
     mathematica
+    logisim-evolution
 
     bat
     splayer
+
+    circumflex
+    glow
+    libreoffice
   ];
 
   home.shellAliases = {
@@ -96,6 +102,10 @@ in
     ];
   };
 
+    # programs.eilmeldung = {
+    # enable = true;
+  # };
+
 
   # programs.zsh = {
   #   enable = true;
@@ -146,6 +156,11 @@ in
   # xdg.configFile."containers/containers.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/containers/containers.conf";
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/niri/config.kdl";
   # xdg.systemDirs.data = [ "$HOME/.local/share/flatpak/exports/share" ];
+
+  xdg.dataFile."fcitx5/rime/default.custom.yaml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/dataFile/rime/default.custom.yaml";
+  xdg.dataFile."fcitx5/rime/double_pinyin_flypy.custom.yaml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/dataFile/rime/double_pinyin_flypy.custom.yaml";
+  xdg.dataFile."fcitx5/rime/double_pinyin_flypy.schema.yaml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/dataFile/rime/double_pinyin_flypy.schema.yaml";
+
   home.sessionVariables = {
     XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/share:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share";
   };
