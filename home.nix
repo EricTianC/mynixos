@@ -20,7 +20,9 @@ in
     logisim-evolution
 
     bat
-    splayer
+    pkgs-unstable.splayer
+
+    rustup
 
     circumflex
     glow
@@ -164,6 +166,12 @@ in
   home.sessionVariables = {
     XDG_DATA_DIRS="$XDG_DATA_DIRS:/usr/share:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share";
   };
+
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.sp1/bin"
+    "${config.home.homeDirectory}/.local/bin"
+    "${config.home.homeDirectory}/.cargo/bin"
+  ];
 
   home.stateVersion = "25.11";
 }

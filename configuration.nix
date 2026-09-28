@@ -16,7 +16,7 @@
   systemd.tpm2.enable = false;
   boot.initrd.systemd.tpm2.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -208,6 +208,8 @@
     gtkwave
     element-desktop
 
+    pkgs-unstable.codex
+    # pkgs-unstable.chatgpt
     uv
     dotnet-sdk_9
     nodejs
@@ -218,6 +220,7 @@
     pkgs-unstable.git-xet
 
     agenix
+    sops
 
     pkgs-unstable.prismlauncher
     godot-mono
@@ -352,7 +355,7 @@
   #   language = "zh";
   # }; 配置搞不懂一点
 
-  age.identityPaths = [ "/home/tyllm/.ssh/id_ed25519" ];
+  # age.identityPaths = [ "/home/tyllm/.ssh/id_ed25519" ];
 
   # age.secrets.miniflux-creds.file = ./secrets/miniflux-creds.age;
   # services.miniflux = {
@@ -368,8 +371,27 @@
   #   };
   # };
 
+  sops = {
+    defaultSopsFile = ./secrets/secrets.yaml;
+    age.keyFile = "/home/tyllm/.config/sops/age/keys.txt";
+
+    secrets."hermes-env" = {};
+  };
+
+  services.hermes-agent = {
+    enable = true;
+    settings.model = {
+      provider = "xiaomi";
+      default = "mimo-v2.6-pro";
+    };
+    environmentFiles = [
+      config.sops.secrets."hermes-env".path
+    ];
+    addToSystemPackages = true;
+  };
+
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 10006 25565 ]; # for peer.zig
+  networking.firewall.allowedTCPPorts = [ 9000 10006 25565 ]; # for peer.zig
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

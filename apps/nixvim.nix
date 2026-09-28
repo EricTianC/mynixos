@@ -291,7 +291,7 @@
     dependencies = {
       fd.enable = true;
       lean = {
-        enable = true;
+        enable = false;
         packageFallback = true;
       };
       flutter = {

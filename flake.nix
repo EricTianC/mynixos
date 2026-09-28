@@ -16,6 +16,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixvim = {
       # url = "github:nix-community/nixvim/nixos-25.11";
       url = "github:nix-community/nixvim";
@@ -42,10 +47,10 @@
     # nix-openclaw.url = "github:openclaw/nix-openclaw";
     nullclaw.url = "github:nullclaw/nullclaw";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
-
+    hermes-agent.url = "github:NousResearch/hermes-agent";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, nixvim, noctalia, noctalia-greeter, mihomosh, catppuccin,eilmeldung, agenix, nullclaw, nix-flatpak, ... }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, nixvim, noctalia, noctalia-greeter, mihomosh, catppuccin,eilmeldung, agenix, nullclaw, nix-flatpak, hermes-agent,... }@inputs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = let 
           system = "x86_64-linux";
@@ -58,6 +63,7 @@
         inherit mihomosh; inherit noctalia; inherit nullclaw; inherit noctalia-greeter;};
       modules = [
         ./configuration.nix
+        sops-nix.nixosModules.sops
 
         home-manager.nixosModules.home-manager
         {
@@ -96,6 +102,7 @@
         nix-flatpak.nixosModules.nix-flatpak
         agenix.nixosModules.default
         noctalia-greeter.nixosModules.default
+        hermes-agent.nixosModules.default
         
       ];
     };
