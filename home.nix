@@ -20,13 +20,15 @@ in
     logisim-evolution
 
     bat
-    pkgs-unstable.splayer
+    pkgs-unstable.splayer-next
 
     rustup
 
     circumflex
     glow
     libreoffice
+
+    mermaid-cli
   ];
 
   home.shellAliases = {

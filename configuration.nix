@@ -2,13 +2,14 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, mihomosh, pkgs, noctalia, pkgs-unstable, ... }:
+{ lib, config, mihomosh, pkgs, noctalia, pkgs-unstable, mooling-packages, ... }:
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
 
       apps/nixvim.nix
+      extras/hamamatsu-slm.nix
     ];
 
   # Bootloader.
@@ -17,6 +18,8 @@
   boot.initrd.systemd.tpm2.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages;
+
+  fileSystems."/home".neededForBoot = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -49,7 +52,7 @@
 
     nvidiaSettings = true;
 
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
 
     prime = {
       intelBusId = "PCI:0:2:0";
@@ -101,7 +104,7 @@
   #   enable = true;
   #   wayland.enable = true;
   # };
-  programs.noctalia-greeter = {
+  services.displayManager.noctalia-greeter = {
     enable = true;
   };
   # services.greetd = {
@@ -166,7 +169,7 @@
   users.users.tyllm = {
     isNormalUser = true;
     description = "tyllm";
-    extraGroups = [ "networkmanager" "wheel" "wireshark" ];
+    extraGroups = [ "networkmanager" "wheel" "wireshark" "hermes" ];
     packages = with pkgs; [
       brightnessctl
     #  thunderbird
@@ -226,11 +229,18 @@
     godot-mono
 
     elan
-    
+    mooling-packages.packages.${pkgs.stdenv.hostPlatform.system}.deepseek-harness-desktop
+
+    pkgs-unstable.antigravity-cli
     # wlgreet
   ];
 
   programs.nix-ld.enable = true;
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   programs.git = {
     enable = true;
@@ -379,11 +389,33 @@
   };
 
   services.hermes-agent = {
-    enable = true;
-    settings.model = {
-      provider = "xiaomi";
-      default = "mimo-v2.6-pro";
+    enable = false;
+    #enable = true;
+    settings = { 
+      model = {
+        provider = "xiaomi";
+        default = "mimo-v2.6-pro";
+      };
+
+      platforms.qqbot = {
+        enabled = true;
+        extra = {
+          dm_policy = "allowlist";
+          group_policy = "allowlist";
+
+          allow_from = [ "0D765BFF45BB6DAFC55A0A4B3D9D393F" ];
+          group_allow_from = [];
+          
+        };
+      };
+
+      web = {
+        search_backend = "searxng";
+        extract_backend = "firecrawl";
+      };
     };
+    extraDependencyGroups = ["messaging"];
+
     environmentFiles = [
       config.sops.secrets."hermes-env".path
     ];

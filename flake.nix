@@ -48,9 +48,11 @@
     nullclaw.url = "github:nullclaw/nullclaw";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     hermes-agent.url = "github:NousResearch/hermes-agent";
+
+    mooling-packages.url = "github:Mooling0602/nix-packages";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, nixvim, noctalia, noctalia-greeter, mihomosh, catppuccin,eilmeldung, agenix, nullclaw, nix-flatpak, hermes-agent,... }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, nixvim, noctalia, noctalia-greeter, mihomosh, catppuccin,eilmeldung, agenix, nullclaw, nix-flatpak, hermes-agent, mooling-packages,... }@inputs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = let 
           system = "x86_64-linux";
@@ -60,7 +62,7 @@
           inherit system;
           config.allowUnfree = true;
         };
-        inherit mihomosh; inherit noctalia; inherit nullclaw; inherit noctalia-greeter;};
+        inherit mihomosh; inherit noctalia; inherit nullclaw; inherit noctalia-greeter; inherit mooling-packages;};
       modules = [
         ./configuration.nix
         sops-nix.nixosModules.sops
